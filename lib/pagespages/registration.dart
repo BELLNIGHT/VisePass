@@ -8,6 +8,9 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  TextEditingController _loginController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
 
@@ -23,7 +26,7 @@ class _AuthPageState extends State<AuthPage> {
       );  
     }
 
-    Widget _input(Icon icon, String hint, TextEditingController controller, bool obsecure)(
+    Widget _input(Icon icon, String hint, TextEditingController controller, bool obscure){
       return Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         child: TextField(
@@ -31,8 +34,23 @@ class _AuthPageState extends State<AuthPage> {
           obscureText: obscure,
           style: TextStyle(fontSize: 20, color: Colors.blue),
           decoration: InputDecoration(
-            hintStyle: TextStyle(fontWeight: )
-        )
+            hintStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
+            hintText: hint,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue, width: 3)
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue, width: 1)
+            ),
+            prefixIcon: Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: IconTheme(
+                data: IconThemeData(color: Colors.blue),
+                child: icon
+              )
+            )
+          ),
+        ),
       );
   }
 
@@ -43,11 +61,11 @@ class _AuthPageState extends State<AuthPage> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(bottom: 20, top: 10),
-              child: _input()
+              child: _input(Icon(Icons.email), "Email", _loginController, false)
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 20),
-              child: input()
+              child: _input(Icon(Icons.lock), "Password", _passwordController, true)
             ),
             SizedBox(height: 20),
             Padding(
