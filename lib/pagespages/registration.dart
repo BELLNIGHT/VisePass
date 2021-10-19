@@ -22,11 +22,41 @@ class _AuthPageState extends State<AuthPage> {
       )
       );  
     }
+
+    Widget _form(String label, void func()){
+      return Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(bottom: 20, top: 10),
+              child: Text('Login')
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 20),
+              child: Text('Password')
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: Text(label)
+              )
+            )
+          ],
+        ),
+      );
+    }
+
+
+      
+
     return Scaffold(
       body: Column(
         children: <Widget>[
           _logo(),
-          //_form(),
+          _form('LOGIN', (){}),
 
         ],
      )
