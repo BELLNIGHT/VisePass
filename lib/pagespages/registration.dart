@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_application_1/pagespages/colorfl.dart';
 class AuthPage extends StatefulWidget {
    AuthPage({Key? key}) : super(key: key);
 
@@ -54,10 +54,6 @@ class _AuthPageState extends State<AuthPage> {
       );
   }
 
-    
-
-
-
     Widget _form(String label, void func()){
       return Container(
         child: Column(
@@ -91,8 +87,22 @@ class _AuthPageState extends State<AuthPage> {
       body: Column(
         children: <Widget>[
           _logo(),
-          _form('LOGIN', (){}),
-
+          _form('', (){}),
+          GestureDetector(
+            onTap: (){},
+            child: Container(
+              height: 80,
+              color: kclf,
+              child: const Center(child: Text('Start', style: lfd,)),
+              )
+            ),
+          GestureDetector(
+            onTap: (){},
+            child: Container(
+              color: Colors.red,
+              child: const Center(child: Text('Forgot your password?', style: lfd,)),
+              )
+            ),
         ],
      )
     );
