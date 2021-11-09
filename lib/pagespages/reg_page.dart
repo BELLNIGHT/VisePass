@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pagespages/registration.dart';
 import 'package:flutter_application_1/pagespages/colorfl.dart';
-import 'package:flutter_application_1/pagespages/reg_page.dart';
-import 'package:flutter_application_1/pagespages/start_page.dart';
-class AuthPage extends StatefulWidget {
-   AuthPage({Key? key}) : super(key: key);
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({ Key? key }) : super(key: key);
 
   @override
-  _AuthPageState createState() => _AuthPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _loginController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  
+
+
+
   @override
   Widget build(BuildContext context) {
-
+    return Scaffold();
     Widget _logo(){
       return Padding(
         padding: EdgeInsets.only(top:100),
         child: Container(
           child: Align(
-            child: Text('VisePass', style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold, color: Colors.red)
+            child: Text('Register', style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold, color: Colors.green)
           )      
         )
       )
@@ -81,53 +83,4 @@ class _AuthPageState extends State<AuthPage> {
         ),
       );
     }
-
-
-      
-
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          _logo(),
-          _form('', (){}),
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => ResultPage()),
-  );
-
-
-
-            },
-            child: Container(
-              height: 80,
-              color: kclf,
-              child: const Center(child: Text('Start', style: lfd,)),
-              )
-            ),
-          GestureDetector(
-            onTap: (){},
-            child: Container(
-              color: Colors.red,
-              child: const Center(child: Text('Register', style: lfd,)),
-              )
-            ),
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => RegisterPage()),
-  );
-            },
-            child: Container(
-              color: Colors.blue,
-              child: const Center(child: Text('Forgot your password?', style: lfd,)),
-              )
-            ),
-        ],
-     )
-    );
-  }
-}
-
+  }}
