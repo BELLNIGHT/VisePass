@@ -110,7 +110,7 @@ class _AuthPageState extends State<AuthPage> {
             onTap: (){},
             child: Container(
               color: Colors.red,
-              child: const Center(child: Text('Register', style: lfd,)),
+              child: const Center(child: Text('Forgot your password?', style: lfd,)),
               )
             ),
           GestureDetector(
@@ -122,7 +122,7 @@ class _AuthPageState extends State<AuthPage> {
             },
             child: Container(
               color: Colors.blue,
-              child: const Center(child: Text('Forgot your password?', style: lfd,)),
+              child: const Center(child: Text('Register', style: lfd,)),
               )
             ),
         ],
