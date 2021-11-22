@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pagespages/colorfl.dart';
-import 'package:flutter_application_1/pagespages/reg_page.dart';
 import 'package:flutter_application_1/pagespages/start_page.dart';
 class AuthPage extends StatefulWidget {
    AuthPage({Key? key}) : super(key: key);
@@ -115,10 +114,8 @@ class _AuthPageState extends State<AuthPage> {
             ),
           GestureDetector(
             onTap: (){
-              Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => RegisterPage()),
-  );
+
+  
             },
             child: Container(
               color: Colors.blue,
