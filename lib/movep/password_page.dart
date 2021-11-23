@@ -1,152 +1,299 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/lib/laugh/DataBase.dart';
-import 'package:flutter_application_1/pagespages/notepassword.dart';
-
-
-class NotesList extends StatefulWidget {
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hive/hive.dart';
+import 'package:flutter_application_1/pagespages/cryptt.dart';
+import 'package:flutter_application_1/pagespages/brand_icon.dart';
+class Passwords extends StatefulWidget {
   @override
-  _NotesListState createState() => _NotesListState();
+  _PasswordsState createState() => _PasswordsState();
 }
 
-
-class _NotesListState extends State<NotesList> {
-  final _addingController = TextEditingController();
-  final _editingController = TextEditingController();
-
-  
-  @override
-  void dispose() {
-    _addingController.dispose();
-    _editingController.dispose();
-    super.dispose();
-  }
-
-
-  void _addNote(Note note) {
-    DataBase.addNote(note);
-    setState(() {});
-  }
-  void _editNote(Note note) {
-    DataBase.editNote(note);
-    setState(() {});
-  }
-  void _deleteNote(Note note) {
-    DataBase.deleteNote(note);
-    setState(() {});
-  }
-
-  void _showAddingDialog() async {
-    return await showDialog(
-      context: context,
-      builder: (_) => SimpleDialog(
-        contentPadding: EdgeInsets.all(10),
-        children: [
-          TextField(
-            controller: _addingController,
-            autofocus: true,
-            
-            onSubmitted: (value) {
-              _addNote(Note(title: value));
-              _addingController.clear();
-              Navigator.pop(context);
-            }
-          )
-        ]
-      )
-    );
-  }
-  void _showEditingDialog(Note note) async {
-    return await showDialog(
-      context: context,
-      builder: (_) => SimpleDialog(
-        contentPadding: EdgeInsets.all(10),
-        children: [
-          TextField(
-            
-            controller: () {
-             
-              _editingController.text = note.title;
-              return _editingController;
-            }(),
-            autofocus: true,
-            onSubmitted: (value) {
-              _editNote(Note(id: note.id, title: value));
-              _editingController.clear();
-              Navigator.pop(context);
-            }
-          )
-        ]
-      )
-    );
+class _PasswordsState extends State<Passwords> {
+  Box box = Hive.box('passwords');
+  bool longPressed = false;
+  EncryptService _encryptService = new EncryptService();
+  Future fetch() async {
+    if (box.values.isEmpty) {
+      return Future.value(null);
+    } else {
+      return Future.value(box.toMap());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
-        title: Text('Notes',
-          style: TextStyle(color: Color(0xFF5A9C7D))
+        centerTitle: true,
+        title: Text(
+          "Your Passwords",
+          style: TextStyle(
+            fontFamily: "customFont",
+            fontSize: 22.0,
+          ),
         ),
-        centerTitle: true
       ),
-
-      
+      //
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add, size: 32, color: Color(0xFFB66B90)),
-        tooltip: 'Add new note',
-        onPressed: () => _showAddingDialog()
+        onPressed: insertDB,
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            10.0,
+          ),
+        ),
+        backgroundColor: Color(0xff892cdc),
       ),
+      //
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
+      //
       body: FutureBuilder(
-        future: DataBase.notes(),
-        builder: (_, snapshot) {
-          
-          if (!snapshot.hasData) {
+        future: fetch(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
             return Center(
-              child: CircularProgressIndicator()
-            );
-          }
-
-          final data = snapshot.data;
-
-          
-          if (data.length == 0) {
-            return Center(
-              child: Text('No notes',
+              child: Text(
+                "You have saved no password 😓.\nSave some... \nIt's Secure 🔐.\nEverything is in your Phone..",
                 style: TextStyle(
-                  color: Colors.grey, fontSize: 20
-                )
-              )
+                  fontSize: 22.0,
+                  fontFamily: "customFont",
+                ),
+                textAlign: TextAlign.center,
+              ),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                Map data = box.getAt(index);
+                return Card(
+                  margin: EdgeInsets.all(
+                    12.0,
+                  ),
+                  child: Slidable(
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.25,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 12.0,
+                        horizontal: 20.0,
+                      ),
+                      tileColor: Color(0xff1c1c1c),
+                      leading: CustomIcons.icons[data['type']] ??
+                          Icon(
+                            Icons.lock,
+                            size: 32.0,
+                          ),
+                      title: Text(
+                        "${data['nick']}",
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          fontFamily: "customFont",
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(
+                        "CLick on the copy icon to copy your Password !",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: "customFont",
+                        ),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          _encryptService.copyToClipboard(
+                            data['password'],
+                            context,
+                          );
+                        },
+                        icon: Icon(
+                          Icons.copy_rounded,
+                          size: 36.0,
+                        ),
+                      ),
+                    ),
+                    secondaryActions: <Widget>[
+                      IconSlideAction(
+                        caption: 'Edit',
+                        color: Colors.black45,
+                        icon: Icons.edit,
+                        onTap: () {},
+                      ),
+                      IconSlideAction(
+                        closeOnTap: true,
+                        caption: 'Delete',
+                        color: Colors.red,
+                        icon: Icons.delete,
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+                );
+              },
             );
           }
+        },
+      ),
+    );
+  }
 
-          return ListView.separated(
-            
-            padding: const EdgeInsets.all(10),
-            
-            itemCount: data.length,
-            
-            itemBuilder: (_, index) {
-              
-              final note = data[index];
-
-              return NoteWidget(
-                title: note.title,
-
-                edit: () {
-                  _showEditingDialog(note);
+  void insertDB() {
+    String type;
+    String nick;
+    String email;
+    String password;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        padding: EdgeInsets.all(
+          12.0,
+        ),
+        child: Form(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Service",
+                  hintText: "Google",
+                ),
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontFamily: "customFont",
+                ),
+                onChanged: (val) {
+                  type = val;
                 },
-                delete: () {
-                  _deleteNote(note);
-                }
-              );
-            },
-            
-            separatorBuilder: (_, index) => Divider()
-          );
-        }
-      )
+                validator: (val) {
+                  if (val!.trim().isEmpty) {
+                    return "Enter A Value !";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              SizedBox(
+                height: 12.0,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Nick Name",
+                  hintText: "Will be dispplayed as a Title",
+                ),
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontFamily: "customFont",
+                ),
+                onChanged: (val) {
+                  nick = val;
+                },
+                validator: (val) {
+                  if (val!.trim().isEmpty) {
+                    return "Enter A Value !";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              SizedBox(
+                height: 12.0,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Username/Email/Phone",
+                ),
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontFamily: "customFont",
+                ),
+                onChanged: (val) {
+                  email = val;
+                },
+                validator: (val) {
+                  if (val!.trim().isEmpty) {
+                    return "Enter A Value !";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              SizedBox(
+                height: 12.0,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Password",
+                ),
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontFamily: "customFont",
+                ),
+                onChanged: (val) {
+                  password = val;
+                },
+                validator: (val) {
+                  if (val!.trim().isEmpty) {
+                    return "Enter A Value !";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              SizedBox(
+                height: 12.0,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  
+                  password = _encryptService.encrypt(password);
+                  
+                  Box box = Hive.box('passwords');
+                
+                  var value = {
+                    'type': type.toLowerCase(),
+                    'nick': nick,
+                    'email': email,
+                    'password': password,
+                  };
+                  box.add(value);
+
+                  Navigator.of(context).pop();
+                  setState(() {});
+                },
+                child: Text(
+                  "Save",
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontFamily: "customFont",
+                  ),
+                ),
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(
+                      vertical: 12.0,
+                      horizontal: 50.0,
+                    ),
+                  ),
+                  backgroundColor: MaterialStateProperty.all(
+                    Color(0xff892cdc),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
+
