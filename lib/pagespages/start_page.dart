@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pagespages/registration.dart';
 
-class ResultPage extends StatefulWidget {
-  ResultPage({Key? key}) : super(key: key);
+void main() => runApp(ResultPage());
 
-  @override
-  _ResultPageState createState() => _ResultPageState();
-}
-
-class _ResultPageState extends State<ResultPage> {
+class ResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        children: [
-          UserAccountsDrawerHeader(
-              accountName: Text('my_name'),
-              accountEmail: Text('my_name@email.com'),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('img/1.png'),
-              ),
-              ),
-          ListTile(title: Text('Documents')),
-          Divider(),
-           ListTile(title: Text('Personal information')),
-          Divider(),
-           ListTile(title: Text('Settings')),
-          Divider(),
-           ListTile(title: Text('Change Password')),
-          Divider(),
+    return MaterialApp(
+    );
+  }
+}
 
-        ],
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('VisePass'),
+      ),
+      body: Center(
       ),
     );
   }
 }
+
+
