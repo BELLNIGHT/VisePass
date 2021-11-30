@@ -85,19 +85,15 @@ class _AuthPageState extends State<AuthPage> {
       
 
     return Scaffold(
+      
       body: Column(
         children: <Widget>[
           _logo(),
           _form('', (){}),
           GestureDetector(
             onTap: (){
-              Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => ResultPage()),
-  );
-
-
-
+              Navigator.push(context,MaterialPageRoute(builder: (context) => ResultPage()),
+              );
             },
             child: Container(
               height: 80,
