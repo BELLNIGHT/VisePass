@@ -24,6 +24,7 @@ class _PasswordsState extends State<Passwords> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MainDrawer(),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
